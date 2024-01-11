@@ -4,6 +4,7 @@ const GlobalStyle = createGlobalStyle`
     * {
       padding: 0;
       margin: 0;
+      background-color: #d9d9d9;
     }
 
     body {
