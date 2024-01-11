@@ -11,17 +11,14 @@ const StyledNavbar = styled.div`
 
 const LogoContainer = styled.div`
     display: flex;
-    background-color: red;
 `
 
-const Logo = styled.h3`
+const Logo = styled.h2`
     font-weight: bold;
-    background-color: white;
 `
 
-const LogoRed = styled.h3`
+const LogoRed = styled.h2`
     color: red;
-    background-color: white;
 `
 
 function Navbar() {
