@@ -22,6 +22,18 @@ const Form = styled.form`
   gap: 15px;
   padding: 50px 20px;
   border-radius: 10px;
+
+  @media (max-width: 1100px) {
+    width: 500px;
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  @media (max-width: 550px) {
+    width: 340px;
+    gap: 5px;
+    flex-direction: column;
+  }
 `
 
 const FormContainer = styled.div`
@@ -41,6 +53,14 @@ const Storage = styled.div`
   border-radius: 10px;
   background-color: white;
   padding: 50px 20px;
+
+  @media (max-width: 1100px) {
+    width: 500px;
+  }
+
+  @media (max-width: 550px) {
+    width: 340px;
+  }
 `
 
 const DataContainer = styled.div`
@@ -53,6 +73,16 @@ const Data = styled.div`
   width: 750px;
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 1100px) {
+    width: 500px;
+  }
+
+  @media (max-width: 550px) {
+    width: 350px;
+    gap: 10px;
+    justify-content: center;
+  }
 `
 
 const Images = styled.div`
@@ -64,7 +94,7 @@ const ImagesContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin: 42px 0 0 50px;
+  margin: 42px 0 0 30px;
 `
 
 const Img = styled.img`

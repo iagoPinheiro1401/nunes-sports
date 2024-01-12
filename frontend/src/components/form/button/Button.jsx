@@ -17,6 +17,10 @@ const StyledButton = styled.button`
     &:active {
         background-color: blue;
     }
+
+    @media (max-width: 1100px) {
+     width: 100px;
+    }
 `
 
 function Button({ children }) {
