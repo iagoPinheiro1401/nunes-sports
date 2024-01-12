@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import axios from "axios"
-import { useState, useEffect } from "react"
+import React, { useEffect, useState } from 'react'
 
 import Navbar from "../src/components/navbar/Navbar"
 import Input from "../src/components/form/input/Input"
@@ -35,6 +35,7 @@ const FormContainer = styled.div`
 
 const Storage = styled.div`
   display: flex;
+  flex-direction: column;
   width: 1000px;
   border-radius: 10px;
   background-color: white;
@@ -72,7 +73,8 @@ const Img = styled.img`
 
 function HomePage () {
   
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([])
+  const [editedProduct, setEditedProduct] = useState({})
 
   useEffect(() => {
     const fetchData = async () => {
@@ -98,6 +100,23 @@ function HomePage () {
     }
   }
 
+  const handleEdit = (product) => {
+    setEditedProduct(product);
+  }
+
+  const handleUpdate = async (productId) => {
+    try {
+      await axios.put(`http://localhost:3333/products/${productId}`, editedProduct);
+      const updatedProducts = products.map((product) =>
+        product._id === productId ? editedProduct : product
+      );
+      setProducts(updatedProducts);
+      setEditedProduct({});
+    } catch (error) {
+      console.error('Error updating product:', error);
+    }
+  }
+
   return (
     <>
       <Navbar/>
@@ -112,34 +131,73 @@ function HomePage () {
         </Form>
 
         <Storage>
-        <Data>
-          {products.map((product) => (
-            <>
-              <DataContainer key={product._id}>
-                <Title>produto</Title>
-                <H4>{product.product}</H4>
-              </DataContainer>
-              <DataContainer key={product._id + '_cod'}>
-                <Title>código</Title>
-                <H4>{product.cod}</H4>
-              </DataContainer>
-              <DataContainer key={product._id + '_desc'}>
-                <Title>descrição</Title>
-                <H4>{product.description}</H4>
-              </DataContainer>
-              <DataContainer key={product._id + '_price'}>
-                <Title>preço</Title>
-                <H4>R$ {product.price}</H4>
-              </DataContainer>
-              <ImagesContainer>
-                <Images>
-                  <Img src="edit.png" width="20px"/> 
-                  <Img src="delete.webp" width="20px" onClick={() => handleDelete(product._id)}/> 
-              </Images>
-              </ImagesContainer>
-            </>
-          ))}
+        {products.map((product) => (
+        <Data key={product._id}>
+          <DataContainer>
+            <Title>produto</Title>
+            <H4>{editedProduct._id === product._id ? (
+              <input
+                type="text"
+                value={editedProduct.product || ''}
+                onChange={(e) => setEditedProduct({ ...editedProduct, product: e.target.value })}
+              />
+            ) : (
+              product.product
+            )}</H4>
+          </DataContainer>
+          <DataContainer key={product._id + '_cod'}>
+            <Title>código</Title>
+            <H4>{editedProduct._id === product._id ? (
+              <input
+                type="text"
+                value={editedProduct.cod || ''}
+                onChange={(e) => setEditedProduct({ ...editedProduct, cod: e.target.value })}
+              />
+            ) : (
+              product.cod
+            )}</H4>
+          </DataContainer>
+          <DataContainer key={product._id + '_desc'}>
+            <Title>descrição</Title>
+            <H4>{editedProduct._id === product._id ? (
+              <input
+                type="text"
+                value={editedProduct.description || ''}
+                onChange={(e) => setEditedProduct({ ...editedProduct, description: e.target.value })}
+              />
+            ) : (
+              product.description
+            )}</H4>
+          </DataContainer>
+          <DataContainer key={product._id + '_price'}>
+            <Title>preço</Title>
+            <H4>{editedProduct._id === product._id ? (
+              <input
+                type="text"
+                value={editedProduct.price || ''}
+                onChange={(e) => setEditedProduct({ ...editedProduct, price: e.target.value })}
+              />
+            ) : (
+              `R$ ${product.price}`
+            )}</H4>
+          </DataContainer>
+          <ImagesContainer>
+            <Images>
+              {editedProduct._id === product._id ? (
+                <React.Fragment>
+                  <button onClick={() => handleUpdate(product._id)}>Salvar</button>
+                  <button onClick={() => setEditedProduct({})}>Cancelar</button>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <Img src="edit.png" width="20px" onClick={() => handleEdit(product)}/>
+                  <Img src="delete.webp" width="20px" onClick={() => handleDelete(product._id)}/>
+                </React.Fragment>
+              )}
+            </Images>
+          </ImagesContainer>
         </Data>
+      ))}
         </Storage>
       </FormContainer>
     </>
