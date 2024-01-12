@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import axios from "axios"
 import React, { useEffect, useState } from 'react'
+import { useForm, Controller } from "react-hook-form"
 
 import Navbar from "../src/components/navbar/Navbar"
 import Input from "../src/components/form/input/Input"
@@ -75,6 +76,7 @@ function HomePage () {
   
   const [products, setProducts] = useState([])
   const [editedProduct, setEditedProduct] = useState({})
+  const { control, handleSubmit, setValue } = useForm()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,17 +119,71 @@ function HomePage () {
     }
   }
 
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post('http://localhost:3333/products', data);
+      setProducts([...products, response.data]);
+      // Limpa os campos do formulário após o envio
+      setValue('product', '');
+      setValue('cod', '');
+      setValue('description', '');
+      setValue('price', '');
+    } catch (error) {
+      console.error('Error creating product:', error);
+    }
+  }
+
   return (
     <>
       <Navbar/>
       <H3>Produtos</H3>
       <FormContainer>
-        <Form>
-          <Input placeholder="produto"/>
-          <Input placeholder="código"/>
-          <Input placeholder="descrição"/>
-          <Input placeholder="preço"/>
-          <Button>Enviar</Button>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Controller
+            name="product"
+            control={control}
+            render={({ field }) => (
+              <Input
+                placeholder="produto"
+                value={field.value}
+                onChange={(e) => setValue('product', e.target.value)}
+              />
+            )}
+          />
+          <Controller
+            name="cod"
+            control={control}
+            render={({ field }) => (
+              <Input
+                placeholder="código"
+                value={field.value}
+                onChange={(e) => setValue('cod', e.target.value)}
+              />
+            )}
+          />
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <Input
+                placeholder="descrição"
+                value={field.value}
+                onChange={(e) => setValue('description', e.target.value)}
+              />
+            )}
+          />
+          <Controller
+            name="price"
+            control={control}
+            render={({ field }) => (
+              <Input
+                placeholder="preço"
+                value={field.value}
+                onChange={(e) => setValue('price', e.target.value)}
+              />
+            )}
+          />
+          <Button type="submit">Enviar</Button>
         </Form>
 
         <Storage>

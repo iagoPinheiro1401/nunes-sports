@@ -15,11 +15,11 @@ const Container = styled.div`
     background-color: none;
 `
 
-function Input({ placeholder }) {
+function Input({ placeholder, value, onChange }) {
     return (
         <Container>
             <span>{placeholder}</span>
-            <StyledInput placeholder={placeholder}/>
+            <StyledInput placeholder={placeholder} value={value} onChange={onChange}/>
         </Container>
     )
 }
