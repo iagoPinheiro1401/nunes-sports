@@ -87,6 +87,17 @@ function HomePage () {
     fetchData();
   }, []);
 
+  const handleDelete = async (productId) => {
+    try {
+      await axios.delete(`http://localhost:3333/products/${productId}`);
+      // Atualize a lista de produtos após a exclusão
+      const updatedProducts = products.filter((product) => product._id !== productId);
+      setProducts(updatedProducts);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  }
+
   return (
     <>
       <Navbar/>
@@ -120,23 +131,15 @@ function HomePage () {
                 <Title>preço</Title>
                 <H4>R$ {product.price}</H4>
               </DataContainer>
+              <ImagesContainer>
+                <Images>
+                  <Img src="edit.png" width="20px"/> 
+                  <Img src="delete.webp" width="20px" onClick={() => handleDelete(product._id)}/> 
+              </Images>
+              </ImagesContainer>
             </>
           ))}
         </Data>
-          <ImagesContainer>
-            <Images>
-              <Img src="edit.png" width="20px"/> 
-              <Img src="delete.webp" width="20px"/> 
-            </Images>
-            <Images>
-              <Img src="edit.png" width="20px"/> 
-              <Img src="delete.webp" width="20px"/> 
-            </Images>
-            <Images>
-              <Img src="edit.png" width="20px"/> 
-              <Img src="delete.webp" width="20px"/> 
-            </Images>
-          </ImagesContainer>
         </Storage>
       </FormContainer>
     </>
