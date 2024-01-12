@@ -1,4 +1,6 @@
 import styled from "styled-components"
+import axios from "axios"
+import { useState, useEffect } from "react"
 
 import Navbar from "../src/components/navbar/Navbar"
 import Input from "../src/components/form/input/Input"
@@ -70,6 +72,21 @@ const Img = styled.img`
 
 function HomePage () {
   
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3333/products');
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <Navbar/>
@@ -84,32 +101,28 @@ function HomePage () {
         </Form>
 
         <Storage>
-          <Data>
-            <DataContainer>
-              <Title>produto</Title>
-              <H4>televisão</H4>
-              <H4>geladeira</H4>
-              <H4>PS5</H4>
-            </DataContainer>
-            <DataContainer>
-              <Title>código</Title>
-              <H4>12er24</H4>
-              <H4>45ol82</H4>
-              <H4>82ww33</H4>
-            </DataContainer>
-            <DataContainer>
-              <Title>descrição</Title>
-              <H4>otimo</H4>
-              <H4>gelada</H4>
-              <H4>meio lento</H4>
-            </DataContainer>
-            <DataContainer>
-              <Title>preço</Title>
-              <H4>R$ 4000</H4>
-              <H4>R$ 5300</H4>
-              <H4>R$ 2700</H4>
-            </DataContainer>
-          </Data>
+        <Data>
+          {products.map((product) => (
+            <>
+              <DataContainer key={product._id}>
+                <Title>produto</Title>
+                <H4>{product.product}</H4>
+              </DataContainer>
+              <DataContainer key={product._id + '_cod'}>
+                <Title>código</Title>
+                <H4>{product.cod}</H4>
+              </DataContainer>
+              <DataContainer key={product._id + '_desc'}>
+                <Title>descrição</Title>
+                <H4>{product.description}</H4>
+              </DataContainer>
+              <DataContainer key={product._id + '_price'}>
+                <Title>preço</Title>
+                <H4>R$ {product.price}</H4>
+              </DataContainer>
+            </>
+          ))}
+        </Data>
           <ImagesContainer>
             <Images>
               <Img src="edit.png" width="20px"/> 
