@@ -1,0 +1,20 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "frontend",
+        "use": "@vercel/static-build",
+        "config": {
+          "package": "frontend/package.json"
+        }
+      },
+      {
+        "src": "backend",
+        "use": "@vercel/node",
+        "config": {
+          "package": "backend/package.json"
+        }
+      }
+    ]
+  }
+  
